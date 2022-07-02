@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@section Styles{
+    <style>
+        h1 {
+            background-color: cadetblue;
+        }
+    </style>
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <button id="change">按我改變文字</button>
+
+    <div class="table"></div>
+
+</div>
+
+@section Scripts{
+    <script>
+        $("#change").click(function () {
+            $(".display-4").text("Hello! .Net Core");
+
+            var emp = {
+                "employees": [
+                    { "name": "Tom", "workYears": 3, "salary": 35000 },
+                    { "name": "Jack", "workYears": 5, "salary": 40000 },
+                    { "name": "Mary", "workYears": 7, "salary": 45000 }
+                ]
+            };
+
+            //for (let item of emp.employees) {
+
+            //    console.log(item.name);
+            //    console.log(item.workYears);
+            //    console.log(item.salary);
+            //}
+
+            //emp.employees.forEach((employee) => {
+            //    //解構賦值(Destructuring assignment)
+            //    const { name, workYears, salary } = employee;
+            //    console.log(name);
+            //    console.log(workYears);
+            //    console.log(salary);
+            //})
+            $("div .table table").remove();
+            $("div .table").append(`<table class="table caption-top"></table>`)
+            $("table").append(`<caption>員工資料</caption>`);
+            $("table").append(`<thead></thead>`);
+            $("table thead").append(`<tr></tr>`)
+
+            for (let i in emp.employees[0]) {
+                $("thead tr").append(`<th>${i}</th>`);
+            }
+            $("table").append(`<tbody></tbody>`);
+            for (let item of emp.employees) {
+                $("table tbody").append(`<tr><td>${item.name}</td><td>${item.workYears}</td><td>${item.salary}</td> </tr>`)
+            }
+
+        })
+    </script>
+
+}

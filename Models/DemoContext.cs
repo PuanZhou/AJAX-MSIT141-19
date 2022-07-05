@@ -54,7 +54,7 @@ namespace prjAJAXDemo.Models
 
             modelBuilder.Entity<Member>(entity =>
             {
-                entity.Property(e => e.MemberId).ValueGeneratedNever();
+                entity.Property(e => e.MemberId).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Email).HasMaxLength(200);
 

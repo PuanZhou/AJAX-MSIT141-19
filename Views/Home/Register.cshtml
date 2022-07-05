@@ -8,11 +8,11 @@
 <div class="row">
     <div class="col-3"></div>
     <div class="col-6">
-        <form name="userInfo" method="post" enctype="application/x-www-form-urlencoded" action="~/api/Regiser">
+        <form name="userInfo" method="post" enctype="application/x-www-form-urlencoded">
             <div class="form-group">
                 <label for="InputName">姓名</label>
                 <input type="text" class="form-control" id="InputName" name="name" placeholder="姓名">
-                <small id="NameHelp" class="form-text text-muted"></small>
+                <small id="NameHelp" class="form-text"></small>
             </div>
             <div class="form-group">
                 <label for="InputEmail">電子郵件</label>
@@ -22,7 +22,10 @@
                 <label for="InputEmail">年紀</label>
                 <input type="number" class="form-control" id="InputAge" name="age" placeholder="請輸入年紀">
             </div>
-
+            <div class="custom-file  mt-3">
+                <input type="file" class="custom-file-input" id="customFile" name="file">
+                <label class="custom-file-label" for="customFile">選擇檔案</label>
+            </div>
             <button type="submit" class="btn btn-primary mt-3">Submit</button>
         </form>
         <div class="alert alert-info" id="div1"></div>
@@ -39,24 +42,50 @@
 
         txtName.addEventListener('blur', () => {
             console.log("blur");
+            small.innerHTML = "";
+            if (txtName.value.trim() === "") {
+                small.innerHTML = "請輸入名稱";
+                small.style.color = "Red";
+            }
+            else {
+                const xhr = new XMLHttpRequest();//step 1 建立Ajax物件
+                xhr.addEventListener('load', () => {
+                    const data = xhr.responseText;
+                    if (data =="True") {
+                        small.innerHTML = "該名稱已被註冊";
+                        small.style.color = "Red";
+                        console.log(data);
+                    }
+                    else {
+                        small.innerHTML = "名稱可以使用";
+                        small.style.color = "blue";
+                        console.log(data);
+                    }
+                });
 
-            const formData = new FormData(document.userInfo);
-
-            const xhr = new XMLHttpRequest();//step 1 建立Ajax物件
-
-            xhr.addEventListener('load', () => {
-                const data = xhr.responseText;
-                small.innerHTML = data;
-            })
-
-            xhr.open('Post', '@Url.Content("~/api/regiser")');//step 2 對伺服器端發出要求(Request)
-            xhr.send(formData);
+                xhr.open('GET', '@Url.Content("~/api/checkName")' + `?name=${txtName.value}`);//step 2 對伺服器端發出要求(Request)
+                xhr.send();
+            };
         })
 
     btnSubmit.addEventListener('click', (evt) => {
         evt.preventDefault(); //停止預設行為 submit link
         const formData = new FormData(document.userInfo);
-         //step1
+
+        //透過 fetch() 上傳圖檔
+        fetch('@Url.Content("~/api/Register")',{
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(data => divInfo.innerHTML=data)
+
+
+
+
+
+        //透過 XMLHttpRequest 上傳圖檔
+         @*//step1
         const xhr = new XMLHttpRequest();
 
         xhr.addEventListener('load', () => {
@@ -67,8 +96,9 @@
         })
 
         //step2
-        xhr.open('POST', '@Url.Content("~/api/index")');
-        xhr.send(formData);
+       // xhr.open('POST', '@Url.Content("~/api/index")');
+          xhr.open('POST', '@Url.Content("~/api/Register")');
+        xhr.send(formData);*@
     });
     </script>
 }
